@@ -4,11 +4,9 @@ from led import LED
 from button import Button
 from oled import OLED
 
+""" Program for controlling motor with LEDs"""
 print("Mode 0 program")
 
-# Motor Driver (DRV8833) 
-PIN_IN1 = 14
-PIN_IN2 = 15
 
 led_green = LED(16)
 led_red = LED(17)
@@ -19,14 +17,20 @@ btn_direction = Button(12)
 # senzor (LM393) D0 pin
 PIN_D0 = 16
 
+#setup oled at 0x3C
 oled = OLED(sda_pin=20,scl_pin=21)
+
+
+# Motor Driver (DRV8833) 
+PIN_IN1 = 14
+PIN_IN2 = 15
 
 motor = DRV8833(pin_in1=PIN_IN1, pin_in2=PIN_IN2)
 motorDirection: bool = False
 motorState: bool = False
 
 
-motor_speed =70
+motor_speed =70 # set initial speed of motor
 
 
 def motorForward():
@@ -37,7 +41,6 @@ def motorForward():
     led_right.off()
     
 def motorBackward():
-    
     motor.backward(motor_speed)
     led_green.on()
     led_red.off()
@@ -45,7 +48,6 @@ def motorBackward():
     led_right.on()
     
 def motorStop():
-   
     motor.stop()
     led_red.on()
     led_green.off()
@@ -59,19 +61,10 @@ def motorToggleDir():
     if(motorDirection):
         motorForward()
         
-        
     else:
         motorBackward()
-        
-# def toggleMotorState():
-#     motorState = not motorState
-#     if(motorState):
-#          if(motorDirection):
-#              motorForward()
-#          else:
-#              motorBackward()
     
-def progressBar():
+def progressBar(): # returns string image, based on speed and state of motor
     oled.clear()
     if(motorState):
         if(motorDirection):
@@ -84,7 +77,8 @@ def progressBar():
         
 try:
     while True:
-        oled.print_text(progressBar() + f"{motor_speed}%")
+        # print out progressbar and motorspeed in %
+        oled.print_text(progressBar() + f"{motor_speed}%") 
         if(btn_start.is_pressed()):
             print("start pressed")
             motorState = not motorState
@@ -104,6 +98,7 @@ try:
             motorToggleDir()
             time.sleep(1)
 
+# for stopping the program
 except KeyboardInterrupt:
         motorStop()
         print("\n Program stopped")
