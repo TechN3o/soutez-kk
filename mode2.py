@@ -1,7 +1,6 @@
 import time
 from drv8833 import DRV8833
 from lm393 import SpeedSensor
-from potentiometer import Potentiometer
 from led import LED
 from button import Button
 from oled import OLED
@@ -12,12 +11,15 @@ print("Mode 2 program")
 
 
 
-# senzor (LM393) D0 pin
+# sensor (LM393) D0 pin
 PIN_D0 = 10
-
-potentiometer = Potentiometer(26)
+# setup encoder
 encoder = RotaryEncoder(9,8,1)
-senzor = SpeedSensor(pin_d0=PIN_D0, holes=20)
+
+#setup speed sensor LM393
+sensor = SpeedSensor(pin_d0=PIN_D0, holes=20)
+
+# init oled display at 0x3C
 oled = OLED(sda_pin=20,scl_pin=21)
 
 # setup LEDs
@@ -29,12 +31,12 @@ btn_start = Button(13)
 btn_direction = Button(12)
 
 # Motor Driver (DRV8833) 
-motor = DRV8833(pin_in1=PIN_IN1, pin_in2=PIN_IN2)
 PIN_IN1 = 14
 PIN_IN2 = 15
+motor = DRV8833(pin_in1=PIN_IN1, pin_in2=PIN_IN2)
 motorDirection: bool = False
 motorState: bool = False
-motor_speed = potentiometer.get_percentage()
+motor_speed = encoder.get_value()
 
 
 def motorForward():
@@ -45,7 +47,6 @@ def motorForward():
     led_right.off()
     
 def motorBackward():
-    
     motor.backward(motor_speed)
     led_green.on()
     led_red.off()
@@ -53,7 +54,6 @@ def motorBackward():
     led_right.on()
     
 def motorStop():
-   
     motor.stop()
     led_red.on()
     led_green.off()
@@ -66,7 +66,6 @@ def motorToggleDir():
     time.sleep(2)
     if(motorDirection):
         motorForward()
-        
         
     else:
         motorBackward()
@@ -82,10 +81,9 @@ try:
         print(encoder.get_value())
         motor_speed = encoder.get_value()
         motorForward()
-        rpm_speed = senzor.get_rpm()
-        pulses = senzor.get_pulses()
+        rpm_speed = sensor.get_rpm() # read from sensor
         
-        print(f"speed: {rpm_speed} RPM | Pulzů celkem: {pulses}")
+        print(f"speed: {rpm_speed} RPM")
         display(f"{rpm_speed} RPM")
         if(btn_start.is_pressed()):
             print("start pressed")
@@ -98,15 +96,16 @@ try:
                     motorBackward()
             else:
                 motorStop()
-            time.sleep(1)
+            time.sleep(2)
         if(btn_direction.is_pressed()):
             print("dir pressed")
             motorDirection = not motorDirection
 
             motorToggleDir()
-            time.sleep(1)
+            time.sleep(2)
         time.sleep(1)
 
 except KeyboardInterrupt:
     print("\nProgram stop")
+    motorStop()
     motor.stop()
