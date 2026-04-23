@@ -3,6 +3,8 @@ import time
 from led import LED
 from button import Button
 from oled import OLED
+from potentiometer import Potentiometer
+
 # Motor Driver (DRV8833) 
 PIN_IN1 = 14
 PIN_IN2 = 15
@@ -22,7 +24,9 @@ motor = DRV8833(pin_in1=PIN_IN1, pin_in2=PIN_IN2)
 motorDirection: bool = False
 motorState: bool = False
 
-motor_speed = 40
+potentiometer = Potentiometer(26)
+
+motor_speed = potentiometer.get_percentage()
 
 
 def motorForward():
@@ -80,7 +84,8 @@ def progressBar():
         
 try:
     while True:
-        oled.print_text(progressBar())
+        motor_speed = potentiometer.get_percentage()
+        oled.print_text(progressBar() + f"{motor_speed}%")
         if(btn_start.is_pressed()):
             print("start pressed")
             motorState = not motorState
