@@ -6,24 +6,21 @@ from led import LED
 from button import Button
 from oled import OLED
 from encoder import RotaryEncoder
-""" Program pro čtení otáček za minutu """
+""" Program for reading RPM """
 
 print("Mode 2 program")
 
-# Motor Driver (DRV8833) 
-PIN_IN1 = 14
-PIN_IN2 = 15
+
 
 # senzor (LM393) D0 pin
 PIN_D0 = 10
 
-motor = DRV8833(pin_in1=PIN_IN1, pin_in2=PIN_IN2)
 potentiometer = Potentiometer(26)
 encoder = RotaryEncoder(9,8,1)
 senzor = SpeedSensor(pin_d0=PIN_D0, holes=20)
 oled = OLED(sda_pin=20,scl_pin=21)
 
-
+# setup LEDs
 led_green = LED(16)
 led_red = LED(17)
 led_left = LED(18)
@@ -31,6 +28,10 @@ led_right = LED(19)
 btn_start = Button(13)
 btn_direction = Button(12)
 
+# Motor Driver (DRV8833) 
+motor = DRV8833(pin_in1=PIN_IN1, pin_in2=PIN_IN2)
+PIN_IN1 = 14
+PIN_IN2 = 15
 motorDirection: bool = False
 motorState: bool = False
 motor_speed = potentiometer.get_percentage()

@@ -5,7 +5,8 @@ from button import Button
 from oled import OLED
 from potentiometer import Potentiometer
 
-print("Mode 0 program")
+""" Program for controlling motor with displayed values"""
+print("Mode 1 program")
 
 
 # set pins of LEDs
@@ -41,7 +42,6 @@ def motorForward():
     led_right.off()
     
 def motorBackward():
-    
     motor.backward(motor_speed)
     led_green.on()
     led_red.off()
@@ -49,7 +49,6 @@ def motorBackward():
     led_right.on()
     
 def motorStop():
-   
     motor.stop()
     led_red.on()
     led_green.off()
@@ -63,18 +62,11 @@ def motorToggleDir():
     if(motorDirection):
         motorForward()
         
-        
     else:
         motorBackward()
         
-# def toggleMotorState():
-#     motorState = not motorState
-#     if(motorState):
-#          if(motorDirection):
-#              motorForward()
-#          else:
-#              motorBackward()
-    
+
+# returns the string for displaying progressbar           
 def progressBar():
     oled.clear()
     if(motorState):
@@ -88,13 +80,15 @@ def progressBar():
         
 try:
     while True:
+        # read value from potentiometer
         motor_speed = potentiometer.get_percentage()
+        # print out the progressbar and motor speed in percents
         oled.print_text(progressBar() + f"{motor_speed}%")
         if(btn_start.is_pressed()):
             print("start pressed")
             motorState = not motorState
-            if(motorState):
-                if(motorDirection):
+            if(motorState): # if motor is running
+                if(motorDirection): # resolve direction in which to spin
                     motorForward()
                     
                 else:
@@ -108,7 +102,7 @@ try:
 
             motorToggleDir()
             time.sleep(1)
-
+# for stopping the program
 except KeyboardInterrupt:
         motorStop()
         print("\n Program stopped")
