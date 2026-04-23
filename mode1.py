@@ -7,27 +7,29 @@ from potentiometer import Potentiometer
 
 print("Mode 0 program")
 
-# Motor Driver (DRV8833) 
-PIN_IN1 = 14
-PIN_IN2 = 15
 
+# set pins of LEDs
 led_green = LED(16)
 led_red = LED(17)
 led_left = LED(18)
 led_right = LED(19)
 btn_start = Button(13)
 btn_direction = Button(12)
-# senzor (LM393) D0 pin
-PIN_D0 = 16
 
+# init display at 0x3C
 oled = OLED(sda_pin=20,scl_pin=21)
 
-motor = DRV8833(pin_in1=PIN_IN1, pin_in2=PIN_IN2)
-motorDirection: bool = False
-motorState: bool = False
 
+# Motor Driver (DRV8833) 
+PIN_IN1 = 14
+PIN_IN2 = 15
+motor = DRV8833(pin_in1=PIN_IN1, pin_in2=PIN_IN2)
+
+#setup potentiometer
 potentiometer = Potentiometer(26)
 
+motorDirection: bool = False
+motorState: bool = False
 motor_speed = potentiometer.get_percentage()
 
 
