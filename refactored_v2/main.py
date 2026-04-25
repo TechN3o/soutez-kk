@@ -1,8 +1,8 @@
 # main.py
-# Toto je ukázka toho, jak by měl vypadat "čistý" neblokující kód (náhrada za mode2.py).
-# Místo `time.sleep()` využívá tzv. neblokující design s využitím `time.ticks_ms()`.
-# To znamená, že hlavní smyčka ("loop") běží co nejrychleji a úkoly se spouštějí
-# jen v momentech, kdy uběhne určitý časový úsek. Tím pádem systém reaguje na tlačítka okamžitě!
+# This is an example of what a "clean" non-blocking code should look like (a replacement for mode2.py).
+# Instead of `time.sleep()`, it uses a non-blocking design utilizing `time.ticks_ms()`.
+# This means the main loop runs as fast as possible, and tasks are triggered
+# only when a specific time interval has passed. Thus, the system reacts to buttons instantly!
 
 import time
 from lib.button import Button
@@ -11,7 +11,7 @@ from lib.encoder import RotaryEncoder
 from lib.lm393 import SpeedSensor
 from motor_controller import MotorController, SystemState
 
-# 1. Třída pro neblokující tlačítko (Debounce bez sleepu)
+# 1. Class for a non-blocking button (Debounce without sleep)
 class NonBlockingButton:
     def __init__(self, pin_num, debounce_ms=200):
         self.btn = Button(pin_num)
@@ -20,11 +20,11 @@ class NonBlockingButton:
         self.last_state = False
 
     def was_just_pressed(self):
-        """Vrátí True, jen když bylo tlačítko právě teď stisknuto (ošetřeno proti zákmitům)."""
+        """Returns True only when the button has just been pressed (debounced)."""
         current_state = self.btn.is_pressed()
         now = time.ticks_ms()
         
-        # Detekce hrany (změna z False na True) a zároveň kontrola času
+        # Edge detection (change from False to True) and time check
         if current_state and not self.last_state:
             if time.ticks_diff(now, self.last_pressed_time) > self.debounce_ms:
                 self.last_pressed_time = now
@@ -35,11 +35,11 @@ class NonBlockingButton:
         return False
 
 def main():
-    print("Spouštím V2 - Neblokující architektura (Mode 2 + Enkodér a Senzor)")
+    print("Starting V2 - Non-blocking architecture (Mode 2 + Encoder and Sensor)")
     
-    # Inicializace periferií
+    # Initialize peripherals
     oled = OLED(sda_pin=20, scl_pin=21)
-    controller = MotorController() # Zde se inicializuje motor i všechny LED
+    controller = MotorController() # Motor and all LEDs are initialized here
     
     btn_start = NonBlockingButton(13)
     btn_direction = NonBlockingButton(12)
@@ -47,55 +47,55 @@ def main():
     encoder = RotaryEncoder(clk_pin=9, dt_pin=8, sw_pin=1)
     sensor = SpeedSensor(pin_d0=10, holes=20)
     
-    # Časovače pro periodické úlohy
+    # Timers for periodic tasks
     last_display_update = time.ticks_ms()
     
-    # Úvodní nastavení
+    # Initial setup
     controller.update_hardware()
     oled.clear()
 
     try:
-        # Hlavní neblokující smyčka (podobná void loop() z Arduina)
+        # Main non-blocking loop (similar to void loop() in Arduino)
         while True:
             current_time = time.ticks_ms()
             
-            # --- 1. Obsluha vstupů (Tlačítka) ---
-            # Tyto funkce se vyhodnotí okamžitě a program nezamrzne!
+            # --- 1. Input handling (Buttons) ---
+            # These functions are evaluated instantly and the program does not freeze!
             if btn_start.was_just_pressed():
-                print("Tlačítko START stisknuto.")
+                print("START button pressed.")
                 controller.toggle_state()
                 
             if btn_direction.was_just_pressed():
-                print("Tlačítko SMĚR stisknuto.")
+                print("DIRECTION button pressed.")
                 controller.toggle_direction()
             
-            # --- 2. Čtení enkodéru a nastavení rychlosti ---
-            # V Pythonu není ++ nebo --, enkodér vrací číslo.
+            # --- 2. Reading the encoder and setting speed ---
+            # There is no ++ or -- in Python, encoder returns a number.
             speed_val = encoder.get_value()
             controller.set_speed(speed_val)
             
-            # --- 3. Nezávislé aktualizace (např. Displej a Senzor) ---
-                # Displej se překreslí jen každých 200 ms (5 FPS).
-                # Tím pádem to nebliká a nezdržuje to zbytek kódu.
+            # --- 3. Independent updates (e.g. Display and Sensor) ---
+            # Display redraws only every 200 ms (5 FPS).
+            # Because of this, it doesn't blink and doesn't slow down the rest of the code.
             if time.ticks_diff(current_time, last_display_update) > 200:
                 last_display_update = current_time
                 
                 rpm = sensor.get_rpm()
                 bar = controller.get_progress_bar_text()
                 
-                # Zápis na displej provádíme efektivně - přemažeme jen když je třeba,
-                # ale i zavolání clear() každých 200ms je mnohem lepší než každou milisekundu.
+                # Writing to the display efficiently - clearing only when necessary,
+                # but even calling clear() every 200ms is much better than every millisecond.
                 oled.clear()
                 oled.print_text(bar, 0, 0)
                 oled.print_text(f"Req Spd: {controller.speed}", 0, 15)
                 oled.print_text(f"Real RPM: {rpm}", 0, 30)
 
-            # Extra krátký sleep jen proto, aby to nesežralo 100% výkonu CPU a nebránilo přerušením
+            # Extra short sleep just so it doesn't consume 100% CPU time and block interrupts
             time.sleep_ms(1) 
 
     except KeyboardInterrupt:
-        print("\nProgram bezpečně ukončen.")
-        # Při ukončení musíme natvrdo vše vypnout
+        print("\nProgram safely terminated.")
+        # Turn everything off safely upon exit
         controller.state = SystemState.STOPPED
         controller.update_hardware()
 

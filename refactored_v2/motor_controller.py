@@ -1,7 +1,7 @@
 # motor_controller.py
-# Tato třída řeší problém "DRY" (Don't Repeat Yourself) a odstraňuje 
-# potřebu globálních proměnných (motorState, motorDirection).
-# Veškerá logika kolem hardwaru (motor, LEDky) je hezky zabalená na jednom místě.
+# This class solves the "DRY" (Don't Repeat Yourself) problem and removes 
+# the need for global variables (motorState, motorDirection).
+# All logic related to hardware (motor, LEDs) is neatly encapsulated in one place.
 
 from lib.drv8833 import DRV8833
 from lib.led import LED
@@ -19,7 +19,7 @@ class MotorController:
         self.led_left = LED(p_led_l)
         self.led_right = LED(p_led_right)
         
-        # Zapouzdřený vnitřní stav (nahrazuje původní globální proměnné)
+        # Encapsulated internal state (replaces original global variables)
         self.state = SystemState.STOPPED
         self.forward_direction = True
         self.speed = 70
@@ -27,7 +27,7 @@ class MotorController:
         self.update_hardware()
 
     def toggle_state(self):
-        """Přepne mezi STOP a RUNNING a ihned aktualizuje HW."""
+        """Toggles between STOP and RUNNING and immediately updates the hardware."""
         if self.state == SystemState.STOPPED:
             self.state = SystemState.RUNNING
         else:
@@ -35,23 +35,23 @@ class MotorController:
         self.update_hardware()
 
     def toggle_direction(self):
-        """Změní směr a aktualizuje HW."""
+        """Changes the direction and updates the hardware."""
         self.forward_direction = not self.forward_direction
         self.update_hardware()
 
     def set_speed(self, speed):
-        """Nastaví rychlost (0-100)."""
-        # Omezení hodnot
+        """Sets the speed (0-100)."""
+        # Clamp values
         self.speed = max(0, min(100, speed))
         
-        # Pokud zrovna jedeme, projeví se změna rychlosti hned
+        # If we are currently running, apply the speed change immediately
         if self.state == SystemState.RUNNING:
             self.update_hardware()
 
     def update_hardware(self):
         """
-        Tato metoda je jediným místem, kde se reálně zapínají LEDky a motor.
-        Odstraňuje duplicitní kód, který byl v původním `motorForward`, `motorBackward` a `motorStop`.
+        This method is the only place where LEDs and motor are physically turned on/off.
+        It removes the duplicate code that was in the original `motorForward`, `motorBackward` and `motorStop`.
         """
         if self.state == SystemState.STOPPED:
             self.motor.stop()
@@ -72,7 +72,7 @@ class MotorController:
                 self.led_right.on()
 
     def get_progress_bar_text(self):
-        """Vrátí textovou reprezentaci stavu pro displej."""
+        """Returns the text representation of the state for the display."""
         if self.state == SystemState.RUNNING:
             return "[    ||==>]" if self.forward_direction else "[<==||    ]"
         return "[    ||    ]"
