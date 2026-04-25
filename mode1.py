@@ -1,9 +1,9 @@
-from drv8833 import DRV8833
+from lib.drv8833 import DRV8833
 import time
-from led import LED
-from button import Button
-from oled import OLED
-from potentiometer import Potentiometer
+from lib.led import LED
+from lib.button import Button
+from lib.oled import OLED
+from lib.potentiometer import Potentiometer
 
 """ Program for controlling motor with displayed values"""
 print("Mode 1 program")
@@ -77,7 +77,7 @@ def progressBar():
     else:
         return "[    ||    ]"
         
-        
+motorStop()
 try:
     while True:
         # read value from potentiometer

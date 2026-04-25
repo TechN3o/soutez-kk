@@ -1,8 +1,8 @@
-from drv8833 import DRV8833
+from lib.drv8833 import DRV8833
 import time
-from led import LED
-from button import Button
-from oled import OLED
+from lib.led import LED
+from lib.button import Button
+from lib.oled import OLED
 
 """ Program for controlling motor with LEDs"""
 print("Mode 0 program")
@@ -74,7 +74,7 @@ def progressBar(): # returns string image, based on speed and state of motor
     else:
         return "[    ||    ]"
         
-        
+motorStop()
 try:
     while True:
         # print out progressbar and motorspeed in %

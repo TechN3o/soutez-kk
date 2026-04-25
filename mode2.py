@@ -1,10 +1,10 @@
 import time
-from drv8833 import DRV8833
-from lm393 import SpeedSensor
-from led import LED
-from button import Button
-from oled import OLED
-from encoder import RotaryEncoder
+from lib.drv8833 import DRV8833
+from lib.lm393 import SpeedSensor
+from lib.led import LED
+from lib.button import Button
+from lib.oled import OLED
+from lib.encoder import RotaryEncoder
 """ Program for reading RPM """
 
 print("Mode 2 program")
