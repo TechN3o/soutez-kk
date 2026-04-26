@@ -3,7 +3,7 @@
 This directory contains the codebase for an MCU programming competition (40th year, Regional round 2025/2026), where I achieved 1st place. 
 
 ## Competition Context & Self-Reflection
-The original code (`mode0.py`, `mode1.py`, `mode2.py`) was written rapidly under a strict 4-hour time constraint. Since the use of AI tools (other than offline and basic internet search) was strictly prohibited during the competition, I strategically utilized AI *before* the competition to pre-generate hardware abstraction libraries (now in `/lib`) to speed up my development. 
+The original code (`mode0.py`, `mode1.py`, `mode2.py`) was written rapidly under a strict 4-hour time constraint. Since the use of AI tools (other than offline and basic internet search) was prohibited during the competition, I strategically utilized AI *before* the competition to pre-generate hardware abstraction libraries (now in `/lib`) to speed up my development, because unlike arduino ecosystem, rpi pico doesnt offer basic hardware libraries.
 
 While the solution secured 1st place, it only scored 17/70 points. After reviewing the official assignment retroactively, the reasons for the point deductions are clear:
 1. **Hardware Deviations:** The assignment specifically requested using a 2-channel relay for direction and a MOSFET for PWM speed control. I used a DRV8833 H-Bridge motor driver instead, because judge aprooved it beforehand, as it delivers the same result. While functionally superior and more modern, it didn't strictly follow the component constraints. 
@@ -23,7 +23,7 @@ As a learning exercise and for professional presentation, I have created the `re
 - [SP STV](http://sp.stv.cz/)
 
 ## Pinout
-Please refer to `readme.txt` for the exact GPIO pin mapping used on the Raspberry Pi Pico.
+Please refer to `doc.md` for the exact GPIO pin mapping used on the Raspberry Pi Pico.
 
 ## Hardware & 3D Printed Parts
 To mount the components securely for the competition, custom 3D models were designed in Fusion 360:
