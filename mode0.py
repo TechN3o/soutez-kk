@@ -14,8 +14,6 @@ led_left = LED(18)
 led_right = LED(19)
 btn_start = Button(13)
 btn_direction = Button(12)
-# senzor (LM393) D0 pin
-PIN_D0 = 16
 
 #setup oled at 0x3C
 oled = OLED(sda_pin=20,scl_pin=21)
@@ -64,7 +62,7 @@ def motorToggleDir():
     else:
         motorBackward()
     
-def progressBar(): # returns string image, based on speed and state of motor
+def progressBar(): # returns string "image", based on speed and state of motor
     oled.clear()
     if(motorState):
         if(motorDirection):

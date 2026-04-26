@@ -3,18 +3,19 @@
 This directory contains the codebase for an MCU programming competition (40th year, Regional round 2025/2026), where I achieved 1st place. 
 
 ## Competition Context & Self-Reflection
-The original code (`mode0.py`, `mode1.py`, `mode2.py`) was written rapidly under a strict 4-hour time constraint. To speed up development, I utilized AI before the competition to generate hardware abstraction libraries (now in `/lib`). 
+The original code (`mode0.py`, `mode1.py`, `mode2.py`) was written rapidly under a strict 4-hour time constraint. Since the use of AI tools (other than offline and basic internet search) was strictly prohibited during the competition, I strategically utilized AI *before* the competition to pre-generate hardware abstraction libraries (now in `/lib`) to speed up my development. 
 
 While the solution secured 1st place, it only scored 17/70 points. After reviewing the official assignment retroactively, the reasons for the point deductions are clear:
-1. **Hardware Deviations:** The assignment specifically requested using a 2-channel relay for direction and a MOSFET for PWM speed control. I used a DRV8833 H-Bridge motor driver instead. While functionally superior and more modern, it didn't strictly follow the component constraints. 
+1. **Hardware Deviations:** The assignment specifically requested using a 2-channel relay for direction and a MOSFET for PWM speed control. I used a DRV8833 H-Bridge motor driver instead, because judge aprooved it beforehand, as it delivers the same result. While functionally superior and more modern, it didn't strictly follow the component constraints. 
 2. **Missing Modes & Features:** "Mode 3" (Serial command parser and sequential state machine) was not implemented. Smooth acceleration/deceleration and the complex 6-LED speed bargraph were also omitted due to time limits. 
-3. **Missing Deliverables:** A 4-position switch was not used for mode selection (separate scripts were run instead), and the `schematics.png` file was missing.
+3. **Missing Deliverables:** A 4-position switch was not used for mode selection (separate scripts were run instead), because implementing it would waste at least 8 wires, which i ran out of.
+Also the `schematics.png` file was missing.
 
 ### The `refactored_v2` Architecture
 As a learning exercise and for professional presentation, I have created the `refactored_v2` directory. It addresses the poor software architecture (anti-patterns) present in the original competition code:
 - **Removed Blocking Delays:** Replaced `time.sleep()` with non-blocking `time.ticks_ms()` logic.
 - **State Machine Implementation:** Encapsulated motor state and hardware updates into a clean `MotorController` class, eliminating messy global variables.
-- **Hardware Decoupling:** Solved DRY (Don't Repeat Yourself) violations by centralizing hardware toggles.
+- **Hardware Decoupling:** Solved DRY violations by centralizing hardware toggles.
 
 ### Relevant Links (Context)
 *Please note: The competition organizers do not maintain these websites well. There are no results for 2026, or the specifications available, and the linked sites are heavily outdated.*
@@ -32,9 +33,13 @@ To mount the components securely for the competition, custom 3D models were desi
 These STL files are small enough to be tracked directly in this repository within the `assets/` folder, allowing anyone to replicate the physical setup.
 
 ## Gallery
-*(Images from the competition and the physical build)*
+*(physical build and the assigment)*
 
+> the final circuit
+
+> top left in the picture is the holder used with the N20-motor + wheel and LM393 sensor
+
+<img src="assets/IMG_20260423_133928.jpg_compressed.JPEG" width="400" />
 <img src="assets/IMG_20260423_113204.jpg_compressed.JPEG" width="400" />
 <img src="assets/IMG_20260423_113215.jpg_compressed.JPEG" width="400" />
 <img src="assets/IMG_20260423_113222.jpg_compressed.JPEG" width="400" />
-<img src="assets/IMG_20260423_133928.jpg_compressed.JPEG" width="400" />
