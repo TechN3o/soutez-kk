@@ -23,3 +23,18 @@ As a learning exercise and for professional presentation, I have created the `re
 
 ## Pinout
 Please refer to `readme.txt` for the exact GPIO pin mapping used on the Raspberry Pi Pico.
+
+## Hardware & 3D Printed Parts
+To mount the components securely for the competition, custom 3D models were designed in Fusion 360:
+- `assets/encoder_wheel_N20.stl`: A custom encoder disk designed for the LM393 optical sensor to measure motor RPM.
+- `assets/holder.stl`: A custom mount for the DC motor and the LM393 sensor.
+
+These STL files are small enough to be tracked directly in this repository within the `assets/` folder, allowing anyone to replicate the physical setup.
+
+## Gallery
+*(Images from the competition and the physical build)*
+
+<img src="assets/IMG_20260423_113204.jpg_compressed.JPEG" width="400" />
+<img src="assets/IMG_20260423_113215.jpg_compressed.JPEG" width="400" />
+<img src="assets/IMG_20260423_113222.jpg_compressed.JPEG" width="400" />
+<img src="assets/IMG_20260423_133928.jpg_compressed.JPEG" width="400" />
