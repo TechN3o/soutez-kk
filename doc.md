@@ -4,6 +4,7 @@
 ## 1. PINOUT / WIRING
 
 ### Buttons
+> both with pull-down resistor
 - **Start/Stop Button:** `GPIO 13`
 - **Direction Button:** `GPIO 12`
 
@@ -23,7 +24,7 @@
 - **SCL:** `GPIO 21` (I2C0)
 
 ### Sensors & Inputs
-- **Potentiometer** (Analog In): `GPIO 26` (ADC0)
+- **Potentiometer** (Analog In): `GPIO 26` (ADC0) + pull-down resistor due to poor contacts
 - **Rotary Encoder CLK:** `GPIO 9`
 - **Rotary Encoder DT:** `GPIO 8`
 - **Rotary Encoder SW:** `GPIO 1`
