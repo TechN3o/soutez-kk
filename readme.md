@@ -3,6 +3,11 @@
 This directory contains the codebase for an MCU programming competition (40th year, Regional round 2025/2026), where I achieved 1st place. 
 
 ## Competition Context & Self-Reflection
+
+### Why Raspberry Pi Pico & MicroPython?
+My choice of platform for this regional round was highly strategic. In the previous district round, I competed using a traditional C++ approach (Arduino MKR) and placed 2nd. The winner of that round used a Raspberry Pi Pico with MicroPython, demonstrating how Python's flexibility and significantly lower lines of code (LOC) enabled much faster rapid prototyping under time pressure. Learning from this, I switched to the Pico to maximize my development speed for this round.
+
+### The Competition Reality
 The original code (`mode0.py`, `mode1.py`, `mode2.py`) was written rapidly under a strict 4-hour time constraint. Since the use of AI tools (other than offline and basic internet search) was prohibited during the competition, I strategically utilized AI *before* the competition to pre-generate hardware abstraction libraries (now in `/lib`) to speed up my development, based on the components list we got beforehand, because unlike arduino ecosystem, rpi pico doesnt offer basic hardware libraries.
 
 While the solution secured 1st place, it only scored 17/70 points. After reviewing the official assignment retroactively, the reasons for the point deductions are clear:
