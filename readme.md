@@ -48,3 +48,4 @@ These STL files are small enough to be tracked directly in this repository withi
 <img src="assets/IMG_20260423_113204.jpg_compressed.JPEG" width="400" />
 <img src="assets/IMG_20260423_113215.jpg_compressed.JPEG" width="400" />
 <img src="assets/IMG_20260423_113222.jpg_compressed.JPEG" width="400" />
+<img src="assets/no_thanks_i_use_ai.JPEG" width="200"/>
